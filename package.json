@@ -6,19 +6,37 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "next lint"
+    "lint": "next lint",
+    "db:push": "drizzle-kit push",
+    "db:studio": "drizzle-kit studio"
   },
   "dependencies": {
+    "@clerk/nextjs": "^6.10.0",
+    "@fal-ai/client": "^1.2.2",
+    "@google/generative-ai": "^0.21.0",
+    "@heroui/react": "^2.6.14",
+    "@neondatabase/serverless": "^0.10.4",
+    "axios": "^1.7.9",
+    "drizzle-orm": "^0.38.4",
+    "firebase": "^11.2.0",
+    "framer-motion": "^12.0.1",
+    "next": "15.1.6",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
-    "next": "15.1.6"
+    "react-icons": "^5.4.0",
+    "react-pageflip": "^2.0.3",
+    "react-toastify": "^11.0.3",
+    "replicate": "^1.0.1",
+    "uuid4": "^2.0.3"
   },
   "devDependencies": {
-    "typescript": "^5",
     "@types/node": "^20",
     "@types/react": "^19",
     "@types/react-dom": "^19",
+    "@types/uuid4": "^2.0.3",
+    "drizzle-kit": "^0.30.2",
     "postcss": "^8",
-    "tailwindcss": "^3.4.1"
+    "tailwindcss": "^3.4.1",
+    "typescript": "^5"
   }
 }
