@@ -1,3 +1,16 @@
+This is an Ai story generator website made for kids and provides bangla society modelled stories generated from Google Gemini and Images are produced from DALL E . The website can organize story , and help you to view them and can also help you to see other users stories . It allows login and signup as well.
+
+Tools used : NextJS , ReactJS , TailwindCSS , HeroUI , clerk , vercel , javascript-es6, Gemini , Dall E Ai 2
+
+
+
+
+
+
+
+
+
+##RULES
 This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
 
 ## Getting Started
