@@ -35,7 +35,7 @@ function ExploreMore() {
 
         const result: any = await db.select().from(StoryData)
             .orderBy(desc(StoryData.id))
-            .limit(8)
+            
             .offset(offset);
         console.log(result);
        setStoryList(result);
