@@ -33,7 +33,7 @@ function StoryItemCard({ story }: StoryItemType) {
 
                         alt="Card example background"
                         className="z-0 w-full h-full scale-125 -translate-y-6 object-cover"
-                        src={'/imageurl.png'}
+                        src={story?.coverImage}
                         width={500}
                         height={500}
                     />

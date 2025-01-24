@@ -37,7 +37,7 @@ function ViewStory({ params }: any) {
 
 
                 <div>
-                    <BookCoverPage></BookCoverPage>
+                    <BookCoverPage story={story}></BookCoverPage>
                 </div>
                 {
                     [...Array(story?.output?.chapters?.length)].map((item, index) => (

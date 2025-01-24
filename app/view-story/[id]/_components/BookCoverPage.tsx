@@ -1,10 +1,10 @@
 import Image from 'next/image'
 import React from 'react'
 
-function BookCoverPage({imageUrl}:any) {
+function BookCoverPage({story}:any) {
   return (
     <div>
-        <Image src={'/imageurl.png'} alt='cover' width={500} height={500}></Image>
+        <Image src={story?.coverImage} alt='cover' width={500} height={500}></Image>
 
 
     </div>

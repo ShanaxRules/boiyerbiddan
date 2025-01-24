@@ -40,6 +40,8 @@ function CreateStory() {
   const notify = (msg:string) => toast(msg);
   const notifyError = (msg:string) =>toast.error(msg);
 
+  const [coverImage , setcoverImage] = useState()
+
 
   //Used to add data to form
 
@@ -55,80 +57,71 @@ function CreateStory() {
 
   }
 
-  const GenerateStory=async()=>{
-    setLoading(true)
-    const FINAL_PROMPT=CREATE_STORY_PROMPT
-    ?.replace('{ageGroup}', formData?.ageGroup??'')
-    .replace('{storyType}', formData?.storyType??'')
-    .replace('{storySubject}', formData?.storySubject??'')
-    .replace('{imageStyle}', formData?.imageStyle??'')
-    //Generate Ai story
-    try{
-      
-      const result = await chatSession.sendMessage(FINAL_PROMPT)
-      const story=JSON.parse(result?.response.text());
-     // this is not working properly
-      const imageResp = await axios.post('/api/generate-image' ,{
-          prompt: 'Add  text with title of cartoon boy:'+story?.bookTitle + 'in bold text for book cover , '+story?.cover?.imagePrompt
-      })
-
-      console.log(imageResp?.data)
-
-     
-
-
-      
-
-
-      const resp = await SaveInDB(result?.response.text())
-      notify("Story generated successfully")
-      console.log(resp);
-      setLoading(false)
-
-
-    }catch(e){
-      console.log(e)
-      notifyError('Server error , try again')
-      setLoading(false)
+  const GenerateStory = async () => {
+    setLoading(true);
+    const FINAL_PROMPT = CREATE_STORY_PROMPT
+      ?.replace('{ageGroup}', formData?.ageGroup ?? '')
+      .replace('{storyType}', formData?.storyType ?? '')
+      .replace('{storySubject}', formData?.storySubject ?? '')
+      .replace('{imageStyle}', formData?.imageStyle ?? '');
+  
+    try {
+      // Generate AI story
+      const result = await chatSession.sendMessage(FINAL_PROMPT);
+      const story = JSON.parse(result?.response.text());
+  
+      // Generate image for the story cover
+      const imageResp = await axios.post('/api/generate-image', {
+        prompt: `Add text with title of cartoon boy: ${story?.bookTitle} in bold text for book cover, ${story?.cover?.imagePrompt}`,
+      });
+  
+      if (imageResp?.data?.image) {
+        console.log(imageResp?.data?.image);
+        setcoverImage(imageResp?.data?.image);
+  
+        // Save story in the database after setting the cover image
+        const resp = await SaveInDB(result?.response.text(), imageResp?.data?.image);
+        notify('Story generated successfully');
+        console.log(resp);
+      } else {
+        throw new Error('Image generation failed');
+      }
+  
+      setLoading(false);
+    } catch (e) {
+      console.log(e);
+      notifyError('Server error, try again');
+      setLoading(false);
     }
+  };
+  
 
-
-    //Save in database
-
-
-
-    //generate image
-
-  }
-
-  const SaveInDB = async (output: string) => {
+  const SaveInDB = async (output: string, coverImage: any) => {
     if (!formData) {
       throw new Error('Form data is missing');
     }
   
-    const recordId = uuid4(); 
-    setLoading(true)
-    try{
-    const result = await db.insert(StoryData).values({
-      storyId: recordId,
-      ageGroup: formData.ageGroup ?? '',
-      imageStyle: formData.imageStyle ?? '',
-      storySubject: formData.storySubject ?? '',
-      storyType: formData.storyType ?? '',
-      coverImage:"none",
-      userEmail:user?.primaryEmailAddress?.emailAddress,
-      userImage:user?.imageUrl,
-      userName:user?.fullName,
-      output: JSON.parse(output)
-      
-    }).returning({storyId:StoryData?.storyId})
-    setLoading(false)
-    return result
-  
-  }catch(e){
-    setLoading(false)
-    console.log(e)
-  }
+    const recordId = uuid4();
+    setLoading(true);
+    try {
+      const result = await db.insert(StoryData).values({
+        storyId: recordId,
+        ageGroup: formData.ageGroup ?? '',
+        imageStyle: formData.imageStyle ?? '',
+        storySubject: formData.storySubject ?? '',
+        storyType: formData.storyType ?? '',
+        coverImage: coverImage, // Use the provided coverImage
+        userEmail: user?.primaryEmailAddress?.emailAddress,
+        userImage: user?.imageUrl,
+        userName: user?.fullName,
+        output: JSON.parse(output),
+      }).returning({ storyId: StoryData?.storyId });
+      setLoading(false);
+      return result;
+    } catch (e) {
+      setLoading(false);
+      console.log(e);
+    }
   };
 
 
