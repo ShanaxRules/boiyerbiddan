@@ -5,7 +5,7 @@ import Replicate from "replicate";
 
 
 
-export async function POST(req: { json: () => any; }){
+export async function POST(req: any){
   const data = await req.json();
   const {prompt} = data;
   console.log(prompt)
